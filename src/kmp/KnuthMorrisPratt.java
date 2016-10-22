@@ -29,6 +29,44 @@ public class KnuthMorrisPratt {
     public List<Integer> findPattern(String pattern, String text) {
         ArrayList<Integer> result = new ArrayList<Integer>();
         // Implement this function yourself
+
+        String s = new String().concat(pattern).concat("$").concat(text);
+
+        int[] prefixFunction = computePrefixFunction(s);
+
+        int sLength = s.length();
+        int patternLength = pattern.length();
+
+        for (int i = patternLength; i < sLength; i++) {
+            if (prefixFunction[i] == patternLength) {
+                result.add(i - 2 * patternLength);
+            }
+        }
+
+        return result;
+    }
+
+    private int[] computePrefixFunction(String s) {
+        int[] result = new int[s.length()];
+        int border = 0;
+        int sLength = s.length();
+
+        for (int i = 1; i < sLength; i++) {
+            char charAtI = s.charAt(i);
+
+            while ((border > 0) && (charAtI != s.charAt(border))) {
+                border = result[border - 1];
+            }
+
+            if (charAtI == s.charAt(border)) {
+                border++;
+            } else {
+                border = 0;
+            }
+
+            result[i] = border;
+        }
+
         return result;
     }
 
